@@ -1,9 +1,8 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
 
 
 class User(AbstractUser):
-    username = None
 
     email = models.EmailField(
         unique=True,
@@ -25,6 +24,20 @@ class User(AbstractUser):
         help_text="Введите вашу фамилию",
         blank=True,
         null=True,
+    )
+
+    groups = models.ManyToManyField(
+        Group,
+        related_name="custom_user_groups",
+        blank=True,
+        verbose_name="Группы",
+    )
+
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name="custom_user_permissions",
+        blank=True,
+        verbose_name="Права пользователя",
     )
 
     USERNAME_FIELD = 'email'
